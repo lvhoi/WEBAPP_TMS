@@ -210,7 +210,7 @@ function renderDrivers() {
           <span class="driver-status-text">${statusLabel}</span>
         </div>
       </div>
-      <div class="driver-vehicle">${d.vehicle.replace('\n','<br>')}</div>
+      <div class="driver-vehicle">${d.vehicle.replace(/\n/g,'<br>')}</div>
     </div>`;
   }).join('');
 }
@@ -303,6 +303,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('shipment-search');
   if (searchInput) {
     searchInput.addEventListener('input', () => renderShipments());
+  }
+
+  // "See all shipments" link on dashboard
+  const seeAllBtn = document.getElementById('btn-see-all-shipments');
+  if (seeAllBtn) {
+    seeAllBtn.addEventListener('click', () => navigateTo('shipments'));
   }
 
   // Start on dashboard
