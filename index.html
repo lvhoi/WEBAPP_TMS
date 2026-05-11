@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1565c0">
+  <meta name="description" content="Ứng dụng quản lý vận tải – theo dõi đơn hàng, tài xế và tuyến đường.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TMS Logistics">
+
+  <title>TMS Logistics</title>
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon-192.svg">
+  <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════
+     APP SHELL
+═══════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Offline notice -->
+  <div id="offline-banner" class="offline-banner" role="alert">
+    ⚠️ Bạn đang offline – dữ liệu có thể chưa được cập nhật
+  </div>
+
+  <!-- Top header -->
+  <header class="app-header">
+    <span id="header-icon"  class="header-icon">🚚</span>
+    <h1   id="header-title">TMS Logistics</h1>
+    <div class="header-actions">
+      <button aria-label="Thông báo" title="Thông báo">🔔</button>
+      <button aria-label="Tài khoản" title="Tài khoản">👤</button>
+    </div>
+  </header>
+
+  <!-- View container (scrollable area) -->
+  <main id="view-container">
+
+    <!-- ─────────────────────────────────────────────
+         VIEW: DASHBOARD
+    ───────────────────────────────────────────── -->
+    <section id="view-dashboard" class="view" role="main" aria-label="Tổng quan">
+
+      <!-- Greeting banner -->
+      <div class="dashboard-banner">
+        <div class="greeting" id="greeting-text">Chào buổi sáng,</div>
+        <div class="greeting-name">Quản lý vận tải 👋</div>
+        <div class="date-line" id="greeting-date"></div>
+      </div>
+
+      <!-- KPI cards -->
+      <div class="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi-value" id="kpi-delivered">–</div>
+          <div class="kpi-label">Đã giao</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" id="kpi-intransit">–</div>
+          <div class="kpi-label">Đang giao</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" id="kpi-pending">–</div>
+          <div class="kpi-label">Chờ lấy</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" id="kpi-drivers">–</div>
+          <div class="kpi-label">Tài xế sẵn sàng</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="section-header mt-16">
+        <h2>Thao tác nhanh</h2>
+      </div>
+      <div class="quick-actions">
+        <button class="qa-btn" data-view="shipments" aria-label="Đơn hàng">
+          <div class="qa-icon" style="background:#e3f2fd">📦</div>
+          <span>Đơn hàng</span>
+        </button>
+        <button class="qa-btn" data-view="drivers" aria-label="Tài xế">
+          <div class="qa-icon" style="background:#e8f5e9">🧑‍✈️</div>
+          <span>Tài xế</span>
+        </button>
+        <button class="qa-btn" data-view="routes" aria-label="Tuyến đường">
+          <div class="qa-icon" style="background:#fff3e0">🗺️</div>
+          <span>Tuyến đường</span>
+        </button>
+        <button class="qa-btn" aria-label="Báo cáo">
+          <div class="qa-icon" style="background:#f3e5f5">📊</div>
+          <span>Báo cáo</span>
+        </button>
+      </div>
+
+      <!-- Recent shipments -->
+      <div class="section-header mt-16">
+        <h2>Đơn hàng gần đây</h2>
+        <a role="button" tabindex="0" onclick="navigateTo('shipments')">Xem tất cả →</a>
+      </div>
+      <div id="recent-shipment-list" class="shipment-list"></div>
+
+    </section><!-- /dashboard -->
+
+    <!-- ─────────────────────────────────────────────
+         VIEW: SHIPMENTS
+    ───────────────────────────────────────────── -->
+    <section id="view-shipments" class="view" role="main" aria-label="Danh sách đơn hàng">
+
+      <!-- Search bar -->
+      <div class="search-bar mt-12">
+        <input id="shipment-search" type="search" placeholder="Tìm mã đơn, địa điểm…" autocomplete="off">
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs" role="tablist" aria-label="Lọc trạng thái">
+        <button class="filter-tab active" role="tab" data-filter="all">Tất cả</button>
+        <button class="filter-tab" role="tab" data-filter="in-transit">Đang giao</button>
+        <button class="filter-tab" role="tab" data-filter="pending">Chờ lấy</button>
+        <button class="filter-tab" role="tab" data-filter="delivered">Đã giao</button>
+        <button class="filter-tab" role="tab" data-filter="cancelled">Đã huỷ</button>
+      </div>
+
+      <!-- Shipment cards -->
+      <div id="shipment-full-list" class="shipment-full-list"></div>
+
+    </section><!-- /shipments -->
+
+    <!-- ─────────────────────────────────────────────
+         VIEW: DRIVERS
+    ───────────────────────────────────────────── -->
+    <section id="view-drivers" class="view" role="main" aria-label="Danh sách tài xế">
+      <div class="section-header mt-12">
+        <h2>Tài xế</h2>
+        <span style="font-size:.78rem;color:var(--text-sub)" id="driver-count"></span>
+      </div>
+      <div id="driver-list" class="driver-list"></div>
+    </section><!-- /drivers -->
+
+    <!-- ─────────────────────────────────────────────
+         VIEW: ROUTES
+    ───────────────────────────────────────────── -->
+    <section id="view-routes" class="view" role="main" aria-label="Tuyến đường">
+      <div class="section-header mt-12">
+        <h2>Tuyến đường đang hoạt động</h2>
+      </div>
+      <div id="route-list" class="route-list"></div>
+    </section><!-- /routes -->
+
+  </main><!-- /view-container -->
+
+  <!-- Bottom navigation -->
+  <nav class="bottom-nav" role="navigation" aria-label="Điều hướng chính">
+    <button class="nav-btn active" data-view="dashboard" aria-label="Tổng quan">
+      <span class="nav-icon">🏠</span>
+      <span>Tổng quan</span>
+    </button>
+    <button class="nav-btn" data-view="shipments" aria-label="Đơn hàng">
+      <span class="nav-icon">📦</span>
+      <span>Đơn hàng</span>
+    </button>
+    <button class="nav-btn" data-view="drivers" aria-label="Tài xế">
+      <span class="nav-icon">🧑‍✈️</span>
+      <span>Tài xế</span>
+    </button>
+    <button class="nav-btn" data-view="routes" aria-label="Tuyến đường">
+      <span class="nav-icon">🗺️</span>
+      <span>Tuyến đường</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<script src="./js/app.js"></script>
+</body>
+</html>

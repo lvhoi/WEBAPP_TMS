@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="102" fill="#1565c0"/>
+  <!-- Truck body -->
+  <rect x="70" y="240" width="242" height="140" rx="14" fill="#fff"/>
+  <!-- Truck cab -->
+  <path d="M312 296 L312 240 L400 240 L434 296 Z" fill="#fff"/>
+  <!-- Wheels -->
+  <circle cx="152" cy="402" r="38" fill="#1565c0" stroke="#fff" stroke-width="13"/>
+  <circle cx="368" cy="402" r="38" fill="#1565c0" stroke="#fff" stroke-width="13"/>
+  <!-- Window -->
+  <rect x="334" y="254" width="62" height="48" rx="8" fill="#90caf9"/>
+  <!-- Cargo lines -->
+  <line x1="110" y1="290" x2="270" y2="290" stroke="#1565c0" stroke-width="10" stroke-linecap="round"/>
+  <line x1="110" y1="322" x2="270" y2="322" stroke="#1565c0" stroke-width="10" stroke-linecap="round"/>
+  <!-- Location pin -->
+  <circle cx="256" cy="120" r="56" fill="#ff6f00"/>
+  <circle cx="256" cy="114" r="22" fill="#fff"/>
+  <line  x1="256" y1="170" x2="256" y2="200" stroke="#ff6f00" stroke-width="14" stroke-linecap="round"/>
+</svg>
